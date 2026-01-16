@@ -60,7 +60,7 @@ export default function Home() {
                 Sprint Planio
               </div>
               <div className="text-sm text-zinc-500 dark:text-zinc-400">
-                Coming Soon
+                Planning Poker
               </div>
             </div>
           </Link>

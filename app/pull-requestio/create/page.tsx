@@ -30,7 +30,7 @@ export default function CreatePRPage() {
     const savedToken = localStorage.getItem("github_token");
     if (!savedToken) {
       toast.error("Please add a GitHub token in the dashboard first");
-      router.push("/");
+      router.push("/pull-requestio");
       return;
     }
     setToken(savedToken);
@@ -124,7 +124,7 @@ export default function CreatePRPage() {
       });
 
       toast.success("Pull request created successfully!");
-      router.push("/");
+      router.push("/pull-requestio");
     } catch (error: any) {
       console.error("Failed to create PR:", error);
       toast.error(
@@ -141,7 +141,7 @@ export default function CreatePRPage() {
         {/* Header */}
         <div className="border-b border-zinc-200 dark:border-zinc-800 p-6 flex items-center gap-4">
           <Link
-            href="/"
+            href="/pull-requestio"
             className="p-2 -ml-2 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-full transition-all"
           >
             <ArrowLeft className="h-5 w-5" />
@@ -236,7 +236,7 @@ export default function CreatePRPage() {
           {/* Actions */}
           <div className="flex items-center justify-end gap-3 pt-4 border-t border-zinc-200 dark:border-zinc-800">
             <Link
-              href="/"
+              href="/pull-requestio"
               className="px-4 py-2 text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
             >
               Cancel

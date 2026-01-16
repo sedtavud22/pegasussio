@@ -395,7 +395,7 @@ export function Dashboard() {
 
           <div className="flex w-full flex-wrap items-center gap-3 sm:w-auto sm:justify-end">
             <Link
-              href="/create"
+              href="/pull-requestio/create"
               className="flex items-center gap-2 bg-zinc-900 dark:bg-zinc-50 text-white dark:text-zinc-900 px-4 py-2 rounded-full text-xs font-medium hover:opacity-90 transition-opacity whitespace-nowrap"
             >
               <Plus className="h-4 w-4" />

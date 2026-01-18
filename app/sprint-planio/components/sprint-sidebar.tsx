@@ -266,21 +266,6 @@ export function SprintSidebar({
 
                     {/* Actions */}
                     <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                      {!isActive && !isCompleted && (
-                        <Button
-                          size="icon"
-                          variant="ghost"
-                          className="h-6 w-6 text-green-600 hover:text-green-700 hover:bg-green-50"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onSetActiveTicket(ticket);
-                          }}
-                          title="Start Voting"
-                        >
-                          <Play className="h-3 w-3 fill-current" />
-                        </Button>
-                      )}
-
                       {isCompleted && (
                         <>
                           {/* Check for Jira Key pattern */}

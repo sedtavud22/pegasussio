@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/utils/supabase/server";
 import { DEFAULT_DECK } from "../store";
 import { SprintGame } from "../components/sprint-game";
 import { Room, Player, Ticket } from "../types";
@@ -13,6 +13,7 @@ export default async function SprintPlanioPage({
   params,
   searchParams,
 }: PageProps) {
+  const supabase = await createClient();
   const { roomId } = await params;
   const search = await searchParams;
   const playerName =

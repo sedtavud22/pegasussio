@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/utils/supabase/client";
 import { SprintHeader } from "./sprint-header";
 import { SprintBoard } from "./sprint-board";
 import { SprintSidebar } from "./sprint-sidebar";
@@ -24,6 +24,7 @@ export function SprintGame({
   initialTickets,
   initialPlayerName,
 }: SprintGameProps) {
+  const [supabase] = useState(() => createClient());
   const {
     setRoomId,
     setPlayerId,

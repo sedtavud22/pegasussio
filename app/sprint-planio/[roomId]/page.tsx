@@ -65,6 +65,21 @@ export default async function SprintPlanioPage({
   const initialPlayers = (pUsers.data as Player[]) || [];
   const initialTickets = (pTickets.data as Ticket[]) || [];
 
+  if (!roomState) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center flex-col gap-4">
+        <h1 className="text-2xl font-bold text-red-500">Failed to load room</h1>
+        <p className="text-zinc-500">Could not create or join room: {roomId}</p>
+        <a
+          href="/sprint-planio"
+          className="px-4 py-2 bg-zinc-900 text-white rounded-md hover:bg-zinc-800 transition-colors"
+        >
+          Return to Lobby
+        </a>
+      </div>
+    );
+  }
+
   return (
     <SprintGame
       roomId={roomId}

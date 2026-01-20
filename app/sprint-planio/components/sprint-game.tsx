@@ -312,6 +312,38 @@ export function SprintGame({
   const isViewOnly = activeTicket?.status === "completed";
   const isLeader = players.find((p) => p.id === playerId)?.is_leader || false;
 
+  // --------------------------------------------------------------------------
+  // Leadership Race Condition Sanitizer
+  // Fixes issue where multiple users becoming leader due to simultaneous joins.
+  // --------------------------------------------------------------------------
+  useEffect(() => {
+    if (!playerId) return;
+    const leaders = players.filter((p) => p.is_leader);
+
+    if (leaders.length > 1) {
+      // Deterministically pick ONE winner (e.g., lowest ID)
+      const sortedLeaders = [...leaders].sort((a, b) =>
+        a.id.localeCompare(b.id),
+      );
+      const winner = sortedLeaders[0];
+
+      // If I am a leader but not the winner, voluntarily demote myself
+      // (Using current derived isLeader check)
+      if (isLeader && playerId !== winner.id) {
+        console.warn("Duplicate leader detected. resolving race condition...");
+        supabase
+          .from("players")
+          .update({ is_leader: false })
+          .eq("id", playerId)
+          .then(({ error }) => {
+            if (!error) {
+              toast.info("Leadership race resolved: You are now a member.");
+            }
+          });
+      }
+    }
+  }, [players, playerId, isLeader]);
+
   // Actions
   const handleSelect = async (value: string) => {
     if (isViewOnly || roomState?.is_revealed) return;
@@ -568,15 +600,24 @@ export function SprintGame({
               }),
             );
 
-            // DB Update
+            // DB Update: Promote NEW leader first (safety against network failure)
+            // If this succeeds and next fails, we have 2 leaders (ignorable/fixable).
+            // If we demote first and this fails, we have 0 leaders (broken room).
+            const { error: promoteError } = await supabase
+              .from("players")
+              .update({ is_leader: true })
+              .eq("id", targetPlayerId);
+
+            if (promoteError) {
+              toast.error("Failed to transfer leadership");
+              // Revert optimistic update locally if needed, or let realtime fix it
+              return;
+            }
+
             await supabase
               .from("players")
               .update({ is_leader: false })
               .eq("id", playerId);
-            await supabase
-              .from("players")
-              .update({ is_leader: true })
-              .eq("id", targetPlayerId);
 
             toast.success("Leadership transferred");
           }}
